@@ -20,4 +20,26 @@ Deque::~Deque() {
 
 }
 
+void Deque::push_front(int value) {
 
+}
+
+int Deque::pop_front() {
+
+}
+
+int Deque::front() {
+
+}
+
+int Deque::back() {
+
+}
+
+bool Deque::isEmpty() {
+
+}
+
+int Deque::size() {
+
+}
