@@ -112,6 +112,20 @@ int Deque::front() {
   return blockmap[first_block][first_element];
 }
 
+void Deque::push_back(int value) {
+  if(size == (elementsPerBlock * mapSize)) {
+    resize();
+  }
+  if(size == 0) { // empty deque so add first element
+    blockmap[first_block][first_element] = value;
+  }
+  else if(first_element != 
+}
+
+int Deque::pop_back() {
+
+}
+
 int Deque::back() {
   index ix = findIndex(size - 1);
   return blockmap[ix.row][ix.col];
