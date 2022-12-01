@@ -10,6 +10,7 @@
 #ifndef DEQUE_H
 #define DEQUE_H
 
+struct Index;
 
 class Deque {
  private:
@@ -20,14 +21,8 @@ class Deque {
   int first_block; // location where data starts
   int first_element; // index of where first element is in deque
   void resize();
-  struct Index {
-    int row; // datablock number in blockmap
-    int col; // which column the element we want is on
-  };
-  
   Index findIndex(int element);
   
-
  public:
   Deque();
   ~Deque();

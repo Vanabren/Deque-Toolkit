@@ -28,6 +28,11 @@ Deque::~Deque() {
   delete[] blockmap;
 }
 
+struct Index {
+  int row;
+  int col;
+};
+
 void Deque::resize() { // doubles mapblock size
   int** expandedMap = new int*[2 * mapSize];
   
