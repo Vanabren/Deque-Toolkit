@@ -13,9 +13,9 @@
 using namespace std;
 
 Deque::Deque() {
-  blockmap = nullptr; // new int*[numBlocks];
   size = 0; // num elements in array
   mapSize = 8; // size of the blockmap array
+  blockmap = new int*[mapSize];
   elementsPerBlock = 8;
   blockSize = 4096; 
   first_block = 0; // index of the first occupied array in blockmap
@@ -26,7 +26,7 @@ Deque::Deque() {
 
 Deque::~Deque() {
   for(int i = 0; i < mapSize; i++) {
-    delete[] mapSize[i];
+    delete[] blockmap[i];
   }
   delete[] blockmap;
   numBlocks = 0;
@@ -36,6 +36,7 @@ Deque::~Deque() {
 }
 
 void Deque::resize() { // doubles mapblock size
+  int** expandedMap = new int*[2 * mapSize];
   
 }
 
@@ -58,7 +59,10 @@ index Deque::findIndex(int element) {
 }
 
 void Deque::push_front(int value) {
-
+  if(blockmap == nullptr)
+    resize();
+  if(size == (elementsPerBlock * mapSize)
+     resize();
 }
 
 int Deque::pop_front() {
@@ -72,7 +76,10 @@ int Deque::front() {
 }
 
 int Deque::back() {
-  
+  if(blockmap == nullptr)
+    return 0;
+  index ix = findIndex(size - 1);
+  return blockmap[ix.row][ix.col];
 }
 
 bool Deque::isEmpty() {
@@ -89,6 +96,8 @@ int Deque::size() {
 }
 
 int& Deque::operator[](int i) {
+  if(blockmap == nullptr)
+    return 0;
   index ix = findIndex(i);
   return blockmap[ix.row][ix.col];
 }
