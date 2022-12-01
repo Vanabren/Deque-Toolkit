@@ -14,7 +14,7 @@ using namespace std;
 
 Deque::Deque() {
   size = 0; // num elements in array
-  mapSize = 1; // size of the blockmap array
+  mapSize = 1; // initial size of the blockmap array
   blockmap = new int*[mapSize];
   elementsPerBlock = 8;
   blockSize = 4096; 
@@ -38,14 +38,10 @@ Deque::~Deque() {
 void Deque::resize() { // doubles mapblock size
   int** expandedMap = new int*[2 * mapSize];
   
-  for(int i = 0; i < mapSize * 2; i++) {
-    for(int j = 0; j < elementsPerBlock; j++) {
-      expandedMap[i][j] = blockmap[i][j];
-    }
-  }
+  copy(blockmap + first_block, blockmap + mapSize, expandedMap + (mapSize / 2));
   delete[] blockmap;
   blockmap = expandedMap;
-  firstBlock = mapSize / 2; // not sure if this will work
+  firstBlock = mapSize / 2;
   mapSize = mapSize * 2;
 }
 
@@ -82,8 +78,7 @@ void Deque::push_front(int value) {
     first_element = 7; // final position in a previous datablock
     first_block -= 1; // go back one datablock
     blockmap[first_block][first_element] = value;
-  }
-  
+  }  
   
   size++;  
 }
