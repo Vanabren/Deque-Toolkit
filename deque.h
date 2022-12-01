@@ -7,22 +7,25 @@
  * Declaration of Deque methods and members
  */
 
+#ifndef DEQUE_H
+#define DEQUE_H
+
+
 class Deque {
  private:
   int** blockmap; // pointer to map of arrays
   int size; // How many entries in Deque
   int mapSize; // How many rows in blockMap / data blocks
   int elementsPerBlock; // How many elements per data block
-  const static int blockSize;
   int first_block; // location where data starts
   int first_element; // index of where first element is in deque
   void resize();
-  struct index {
+  struct Index {
     int row; // datablock number in blockmap
     int col; // which column the element we want is on
   };
   
-  index findIndex(int element);
+  Index findIndex(int element);
   
 
  public:
@@ -30,10 +33,14 @@ class Deque {
   ~Deque();
   void push_front(int value);
   int pop_front();
+  void push_back(int value);
+  int pop_back();
   int front();
   int back();
   bool isEmpty();
-  int size();
+  int getSize();
   int& operator[](int indexOne);
 };  
   
+
+#endif //DEQUE_H

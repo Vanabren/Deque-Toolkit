@@ -7,7 +7,7 @@
  * Implementation of Deque's methods and members
  */
 
-#include "Deque.h"
+#include "deque.h"
 #include <iostream>
 
 using namespace std;
@@ -17,11 +17,8 @@ Deque::Deque() {
   mapSize = 1; // initial size of the blockmap array
   blockmap = new int*[mapSize];
   elementsPerBlock = 8;
-  blockSize = 4096; 
   first_block = 0; // index of the first occupied array in blockmap
   first_element = 0; // index of the first occupied position in the first block
-  index.row = 0; // for use in findIndex()
-  index.col = 0; // for use in findIndex()
 }
 
 Deque::~Deque() {
@@ -29,10 +26,6 @@ Deque::~Deque() {
     delete[] blockmap[i];
   }
   delete[] blockmap;
-  numBlocks = 0;
-  size = 0;
-  first_block = 0;
-  first_element = 0;
 }
 
 void Deque::resize() { // doubles mapblock size
@@ -41,12 +34,12 @@ void Deque::resize() { // doubles mapblock size
   copy(blockmap + first_block, blockmap + mapSize, expandedMap + (mapSize / 2));
   delete[] blockmap;
   blockmap = expandedMap;
-  firstBlock = mapSize / 2;
+  first_block = mapSize / 2;
   mapSize = mapSize * 2;
 }
 
-index Deque::findIndex(int element) { // for use in [] overload
-  index ix;
+Index Deque::findIndex(int element) { // for use in [] overload
+  Index ix;
   
   ix.row = first_block;
   if(element < elementsPerBlock - first_element) {
@@ -142,7 +135,7 @@ int Deque::pop_back() {
 }
 
 int Deque::back() {
-  index ix = findIndex(size);
+  Index ix = findIndex(size);
   return blockmap[ix.row][ix.col];
 }
 
@@ -153,14 +146,17 @@ bool Deque::isEmpty() {
     return false;
 }
 
-int Deque::size() {
+int Deque::getSize() {
   return size;
 }
 
 int& Deque::operator[](int i) { // returns element at index i
-  if(i > size) // i is too big for the amount of elements in it
-    return -1;
+  Index ix;
+  if(i > size) {// i is too big for the amount of elements in it, so return last element
+    ix = findIndex(size);
+    return blockmap[ix.row][ix.col];
+  }
   
-  index ix = findIndex(i);
+  ix = findIndex(i);
   return blockmap[ix.row][ix.col];
 }

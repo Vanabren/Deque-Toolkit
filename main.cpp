@@ -72,7 +72,6 @@ void coordTest() {
   regPopFront();
   regPushFront(3);
   regPopBack();
-  
 }
 
 void regPushFront(&Deque d, int value) {
@@ -86,17 +85,54 @@ void regPushBack(&Deque d, int value) {
   d.push_back(value);
   cout << endl;
 }
-void regPopFront(&Deque d);
-void regPopBack(&Deque d);
-void accessFront(&Deque d);
-void accessBack(&Deque d);
-void thousandPushFront(&Deque d);
-void thousandPushBack(&Deque d);
-void thousandPopFront(&Deque d);
-void thousandPopBack(&Deque d);
-void hundredPushFront(&Deque d);
-void hundredPushBack(&Deque d);
-void hundredPopFront(&Deque d);
-void hundredPopBack(&Deque d);
+void regPopFront(&Deque d) {
+  cout << "Pop Front: " << d.pop_front() << endl;
+}
 
-void accessorTest(&Deque d);
+void regPopBack(&Deque d) {
+  cout << "Pop Back: " << d.pop_back() << endl;
+}
+
+void accessFront(&Deque d) {
+  cout << "Access Front: " << d.front() << endl;
+}
+
+void accessBack(&Deque d) {
+  cout << "Access Back: " << d.back() << endl;
+}
+
+void thousandPushFront(&Deque d) {
+  return;
+}
+
+void thousandPushBack(&Deque d) {
+  return;
+}
+
+void thousandPopFront(&Deque d) {
+  return;
+}
+
+void thousandPopBack(&Deque d) {
+  return;
+}
+
+void hundredPushFront(&Deque d) {
+  return;
+}
+
+void hundredPushBack(&Deque d) {
+  return;
+}
+
+void hundredPopFront(&Deque d) {
+  return;
+}
+
+void hundredPopBack(&Deque d) {
+  return;
+}
+
+void accessorTest(&Deque d, int index) {
+  cout << "Accessing [" << index << "]: " << d[index] << endl;
+}
