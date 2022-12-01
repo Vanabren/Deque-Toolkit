@@ -34,6 +34,6 @@ class Deque {
   int back();
   bool isEmpty();
   int size();
-  int& operator[](unsigned int indexOne);
+  int& operator[](int indexOne);
 };  
   

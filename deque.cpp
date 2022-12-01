@@ -40,9 +40,21 @@ void Deque::resize() { // doubles mapblock size
 }
 
 index Deque::findIndex(int element) {
-  
+  index ix;
+  ix.row = first_block;
 
-  
+  if(element < elementsPerBlock - first_element) {
+    ix.col = element + first_element;
+  }
+  else {
+    element -= (elementsPerBlock - first_element);
+    ix.row++;
+    int x = element / elementsPerBlock;
+    ix.row += x;
+    ix.col = element - (x * elementsPerBlock);
+  }
+
+  return ix;
 }
 
 void Deque::push_front(int value) {
@@ -60,7 +72,7 @@ int Deque::front() {
 }
 
 int Deque::back() {
-
+  
 }
 
 bool Deque::isEmpty() {
@@ -76,7 +88,7 @@ int Deque::size() {
   return size;
 }
 
-int& Deque::operator[](unsigned int i) {
-  index ix;
-  ix.row = 
+int& Deque::operator[](int i) {
+  index ix = findIndex(i);
+  return blockmap[ix.row][ix.col];
 }
