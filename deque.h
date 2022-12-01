@@ -16,6 +16,13 @@ class Deque {
   const static int blockSize;
   int first_block; // location where data starts
   int first_element; // index of where first element is in deque
+  void resize();
+  struct index {
+    int row; // datablock number in blockmap
+    int col; // which column the element we want is on
+  };
+  
+  index findIndex(int element);
   
 
  public:

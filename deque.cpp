@@ -20,17 +20,29 @@ Deque::Deque() {
   blockSize = 4096; 
   first_block = 0; // index of the first occupied array in blockmap
   first_element = 0; // index of the first occupied position in the first block
+  index.row = 0;
+  index.col = 0;
 }
 
 Deque::~Deque() {
-  for(int i = 0; i < numBlocks; i++) {
-    delete[] blockmap[i];
+  for(int i = 0; i < mapSize; i++) {
+    delete[] mapSize[i];
   }
   delete[] blockmap;
   numBlocks = 0;
   size = 0;
   first_block = 0;
   first_element = 0;
+}
+
+void Deque::resize() { // doubles mapblock size
+  
+}
+
+index Deque::findIndex(int element) {
+  
+
+  
 }
 
 void Deque::push_front(int value) {
@@ -42,7 +54,9 @@ int Deque::pop_front() {
 }
 
 int Deque::front() {
-
+  if(blockmap == nullptr)
+    return 0;
+  return blockmap[first_block][first_element];
 }
 
 int Deque::back() {
@@ -62,7 +76,7 @@ int Deque::size() {
   return size;
 }
 
-int& Deque::operator[](unsigned int index) {
-  int row = first_block + (first_element + index) / blockSize;
-  int col = 0;
+int& Deque::operator[](unsigned int i) {
+  index ix;
+  ix.row = 
 }
