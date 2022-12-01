@@ -45,11 +45,11 @@ int main() {
 }
 
 void stressTest() {
-  /*  Deque d;
+  Deque d;
   cout << "Stress tests begin: \n\n";
   // Stress tests
   thousandPushFront(d); // push a bunch from the front
-  accessorTest(d); // access a bunch
+  //  accessorTest(d); // access a bunch
   thousandPopFront(d); // pop a bunch from the front
   accessFront(d);
   accessBack(d);
@@ -60,8 +60,7 @@ void stressTest() {
   // empty
   thousandPushBack(d); // push a bunch of elements
   thousandPopBack(d); // pop all added elements
-  accessorTest(d); // try to access deleted elements (should return only -1s)
-  */
+  //accessorTest(d); // try to access deleted elements (should return only -1s)
   cout << "\nStress tests over... \n\n";
 }
 
@@ -76,7 +75,9 @@ void coordTest() {
   regPopFront(d);
   regPopBack(d);
   hundredPushFront(d);
-  
+  hundredPopFront(d);
+  thousandPushFront(d);
+  thousandPopBack(d);
 }
 
 void regPushFront(Deque &d, int value) {
@@ -107,13 +108,17 @@ void accessBack(Deque &d) {
 void thousandPushFront(Deque &d) {
   cout << endl;
   for(int i = 0; i < 1000; i++) {
-    cout << "Pushing Thousand (i): " << i << endl;
+    cout << "Pushing Thousand Front (i): " << i << endl;
     d.push_front(i);
   }
 }
 
 void thousandPushBack(Deque &d) {
-  return;
+  cout << endl;
+  for(int i = 0; i < 1000; i++) {
+    cout << "Pushing Thousand Back (i): " << i << endl;
+    d.push_back(i);
+  }
 }
 
 void thousandPopFront(Deque &d) {
@@ -121,7 +126,9 @@ void thousandPopFront(Deque &d) {
 }
 
 void thousandPopBack(Deque &d) {
-  return;
+  for(int i = 0; i < 1000; i++) {
+    cout << "Pop Thousand Back (i): " << d.pop_back() << endl;
+  }
 }
 
 void hundredPushFront(Deque &d) {
@@ -137,7 +144,9 @@ void hundredPushBack(Deque &d) {
 }
 
 void hundredPopFront(Deque &d) {
-  return;
+  for(int i = 0; i < 100; i++) {
+    cout << "Pop Hundred Front (i): " << d.pop_front() << endl;
+  }
 }
 
 void hundredPopBack(Deque &d) {
