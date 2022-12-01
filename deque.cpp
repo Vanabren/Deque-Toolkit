@@ -47,8 +47,16 @@ void Deque::resize() { // doubles mapblock size
 
 index Deque::findIndex(int element) { // for use in [] overload
   index ix;
-  ix.row = first_block;
+  
+  // if Deque is empty or does not have that much space, returns -1 ix
+  if(isEmpty() || element > size-1) { 
+    ix.row = -1;
+    ix.col = -1;
+    return ix;
+  }
 
+  
+  ix.row = first_block;
   if(element < elementsPerBlock - first_element) {
     ix.col = element + first_element;
   }
@@ -122,5 +130,8 @@ int Deque::size() {
 
 int& Deque::operator[](int i) {
   index ix = findIndex(i);
+  // if Deque is empty or doesn't have enough elements, return -1
+  if(ix.row == -1 || ix.col == -1)
+    return -1;
   return blockmap[ix.row][ix.col];
 }

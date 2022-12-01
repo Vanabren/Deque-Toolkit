@@ -9,12 +9,17 @@
 
 
 #include <iostream>
+#include <string>
 #include "deque.h"
 
 using namespace std;
 
+void thousandPush(&Deque d);
+void thousandPop(&Deque d);
+void accessorTest(&Deque d);
+
 int main() {
-  
+  Deque d;
   
   return 0;
 }
