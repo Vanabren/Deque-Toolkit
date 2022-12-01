@@ -48,14 +48,6 @@ void Deque::resize() { // doubles mapblock size
 index Deque::findIndex(int element) { // for use in [] overload
   index ix;
   
-  // if Deque is empty or does not have that much space, returns -1 ix
-  if(isEmpty() || element > size-1) { 
-    ix.row = -1;
-    ix.col = -1;
-    return ix;
-  }
-
-  
   ix.row = first_block;
   if(element < elementsPerBlock - first_element) {
     ix.col = element + first_element;
@@ -75,7 +67,7 @@ void Deque::push_front(int value) {
   if(size == (elementsPerBlock * mapSize)) {
     resize();
   }
-  if(size == 0) { // empty deque so add first element
+  if(isEmpty()) { // empty deque so add first element
     blockmap[first_block][first_element] = value;
   }
   else if(first_element != 0) { // shouldn't be anything behind first element
@@ -96,6 +88,7 @@ int Deque::pop_front() {
     return -1;
   
   int front = blockmap[first_block][first_element];
+  blockmap[first_block][first_element] = -1;
   
   if(first_element < 7) { // just move element up one
     first_element++;
@@ -104,7 +97,8 @@ int Deque::pop_front() {
     first_block++;
     first_element = 0;
   }
-
+  
+  size--;
   return front;
 }
 
@@ -116,18 +110,39 @@ void Deque::push_back(int value) {
   if(size == (elementsPerBlock * mapSize)) {
     resize();
   }
-  if(size == 0) { // empty deque so add first element
+  if(isEmpty()) { // empty deque so set to first element
     blockmap[first_block][first_element] = value;
+    size++;
+    return;
   }
-  else if(first_element != 
+
+  Index last = findIndex(size); // gets index of last element in deque
+  if(last.col < 7) { // last element in data block isn't filled
+    blockmap[last.row][last.col+1] = value;
+    size++;
+  }
+  else { // last element in data block is filled, so forward another block
+    blockmap[last.row + 1][0] = value;
+    size++;
+  }
 }
 
 int Deque::pop_back() {
-
+  if(isEmpty()) // return -1 cause empty
+    return -1;
+  
+  Index last = findIndex(size); // find index of last element in deque
+  
+  int lastE = blockmap[last.row][last.col]; // grab element data
+  
+  blockmap[last.row][last.col] = -1; // set element to -1 just-in-case
+  
+  size--;
+  return lastE;
 }
 
 int Deque::back() {
-  index ix = findIndex(size - 1);
+  index ix = findIndex(size);
   return blockmap[ix.row][ix.col];
 }
 
@@ -142,10 +157,10 @@ int Deque::size() {
   return size;
 }
 
-int& Deque::operator[](int i) {
-  index ix = findIndex(i);
-  // if Deque is empty or doesn't have enough elements, return -1
-  if(ix.row == -1 || ix.col == -1)
+int& Deque::operator[](int i) { // returns element at index i
+  if(i > size) // i is too big for the amount of elements in it
     return -1;
+  
+  index ix = findIndex(i);
   return blockmap[ix.row][ix.col];
 }
