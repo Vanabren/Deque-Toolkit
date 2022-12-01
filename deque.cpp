@@ -71,7 +71,7 @@ Index Deque::findIndex(int element) { // for use in [] overload
   return ix;
 }
 
-void Deque::push_front(int value) {
+void Deque::push_front(int value) { // this is causing segfaults, for good reason cuz the method is garbage
   if(size == (elementsPerBlock * mapSize)) {
     resize();
   }
