@@ -14,14 +14,14 @@ using namespace std;
 
 Deque::Deque() {
   size = 0; // num elements in array
-  mapSize = 8; // size of the blockmap array
+  mapSize = 1; // size of the blockmap array
   blockmap = new int*[mapSize];
   elementsPerBlock = 8;
   blockSize = 4096; 
   first_block = 0; // index of the first occupied array in blockmap
   first_element = 0; // index of the first occupied position in the first block
-  index.row = 0;
-  index.col = 0;
+  index.row = 0; // for use in findIndex()
+  index.col = 0; // for use in findIndex()
 }
 
 Deque::~Deque() {
@@ -49,7 +49,7 @@ void Deque::resize() { // doubles mapblock size
   mapSize = mapSize * 2;
 }
 
-index Deque::findIndex(int element) {
+index Deque::findIndex(int element) { // for use in [] overload
   index ix;
   ix.row = first_block;
 
@@ -68,32 +68,53 @@ index Deque::findIndex(int element) {
 }
 
 void Deque::push_front(int value) {
-  if(blockmap == nullptr)
+  if(size == (elementsPerBlock * mapSize)) {
     resize();
-  if(size == (elementsPerBlock * mapSize)
-     resize();
+  }
+  if(size == 0) { // empty deque so add first element
+    blockmap[first_block][first_element] = value;
+  }
+  else if(first_element != 0) { // shouldn't be anything behind first element
+    blockmap[first_block][first_element - 1] = value;
+    first_element -= 1;
+  }
+  else { // need to back up to a previous datablock
+    first_element = 7; // final position in a previous datablock
+    first_block -= 1; // go back one datablock
+    blockmap[first_block][first_element] = value;
+  }
+  
+  
+  size++;  
 }
 
 int Deque::pop_front() {
+  if(isEmpty())
+    return -1;
+  
+  int front = blockmap[first_block][first_element];
+  
+  if(first_element < 7) { // just move element up one
+    first_element++;
+  }
+  else { // f_e is 7 (last ele in block) so move forward a block and set f_e to 0
+    first_block++;
+    first_element = 0;
+  }
 
+  return front;
 }
 
 int Deque::front() {
-  if(blockmap == nullptr)
-    return 0;
   return blockmap[first_block][first_element];
 }
 
 int Deque::back() {
-  if(blockmap == nullptr)
-    return 0;
   index ix = findIndex(size - 1);
   return blockmap[ix.row][ix.col];
 }
 
 bool Deque::isEmpty() {
-  if(blockmap == nullptr)
-    return true;
   if(size == 0)
     return true;
   else
@@ -105,8 +126,6 @@ int Deque::size() {
 }
 
 int& Deque::operator[](int i) {
-  if(blockmap == nullptr)
-    return 0;
   index ix = findIndex(i);
   return blockmap[ix.row][ix.col];
 }
