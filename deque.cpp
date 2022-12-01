@@ -38,6 +38,15 @@ Deque::~Deque() {
 void Deque::resize() { // doubles mapblock size
   int** expandedMap = new int*[2 * mapSize];
   
+  for(int i = 0; i < mapSize * 2; i++) {
+    for(int j = 0; j < elementsPerBlock; j++) {
+      expandedMap[i][j] = blockmap[i][j];
+    }
+  }
+  delete[] blockmap;
+  blockmap = expandedMap;
+  firstBlock = mapSize / 2; // not sure if this will work
+  mapSize = mapSize * 2;
 }
 
 index Deque::findIndex(int element) {
