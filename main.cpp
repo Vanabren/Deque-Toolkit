@@ -71,19 +71,22 @@ void coordTest() {
   // Tests
   regPopFront(d);
   regPushFront(d, 3);
+  accessFront(d);
+  accessBack(d);
+  regPopFront(d);
   regPopBack(d);
+  hundredPushFront(d);
+  
 }
 
 void regPushFront(Deque &d, int value) {
   cout << "Pushing " << value << " to the front:" << endl;
   d.push_front(value);
-  cout << endl;
 }
 
 void regPushBack(Deque &d, int value) {
   cout << "Pushing " << value << " to the back:" << endl;
   d.push_back(value);
-  cout << endl;
 }
 void regPopFront(Deque &d) {
   cout << "Pop Front: " << d.pop_front() << endl;
@@ -102,7 +105,11 @@ void accessBack(Deque &d) {
 }
 
 void thousandPushFront(Deque &d) {
-  return;
+  cout << endl;
+  for(int i = 0; i < 1000; i++) {
+    cout << "Pushing Thousand (i): " << i << endl;
+    d.push_front(i);
+  }
 }
 
 void thousandPushBack(Deque &d) {
@@ -118,7 +125,11 @@ void thousandPopBack(Deque &d) {
 }
 
 void hundredPushFront(Deque &d) {
-  return;
+  cout << endl;
+  for(int i = 0; i < 100; i++) {
+    cout << "Pushing Hundred (i): " << i << endl;
+    d.push_front(i);
+  }
 }
 
 void hundredPushBack(Deque &d) {

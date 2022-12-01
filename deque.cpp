@@ -16,6 +16,9 @@ Deque::Deque() {
   size = 0; // num elements in array
   mapSize = 1; // initial size of the blockmap array
   blockmap = new int*[mapSize];
+  for(int i = 0; i < mapSize; i++) {
+    blockmap[i] = new int[elementsPerBlock];
+  }
   elementsPerBlock = 8;
   first_block = 0; // index of the first occupied array in blockmap
   first_element = 0; // index of the first occupied position in the first block
@@ -35,9 +38,16 @@ struct Index {
 
 void Deque::resize() { // doubles mapblock size
   int** expandedMap = new int*[2 * mapSize];
+  for(int i = 0; i < 2 * mapSize; i++) {
+    expandedMap[i] = new int[elementsPerBlock];
+  }
   
   copy(blockmap + first_block, blockmap + mapSize, expandedMap + (mapSize / 2));
+  for(int i = 0; i < mapSize; i++) {
+    delete[] blockmap[i];
+  }
   delete[] blockmap;
+  
   blockmap = expandedMap;
   first_block = mapSize / 2;
   mapSize = mapSize * 2;
@@ -114,7 +124,7 @@ void Deque::push_back(int value) {
     return;
   }
 
-  Index last = findIndex(size); // gets index of last element in deque
+  Index last = findIndex(size - 1); // gets index of last element in deque
   if(last.col < 7) { // last element in data block isn't filled
     blockmap[last.row][last.col+1] = value;
     size++;
@@ -129,7 +139,7 @@ int Deque::pop_back() {
   if(isEmpty()) // return -1 cause empty
     return -1;
   
-  Index last = findIndex(size); // find index of last element in deque
+  Index last = findIndex(size - 1); // find index of last element in deque
   
   int lastE = blockmap[last.row][last.col]; // grab element data
   
@@ -140,7 +150,7 @@ int Deque::pop_back() {
 }
 
 int Deque::back() {
-  Index ix = findIndex(size);
+  Index ix = findIndex(size - 1);
   return blockmap[ix.row][ix.col];
 }
 
@@ -158,7 +168,7 @@ int Deque::getSize() {
 int& Deque::operator[](int i) { // returns element at index i
   Index ix;
   if(i > size) {// i is too big for the amount of elements in it, so return last element
-    ix = findIndex(size);
+    ix = findIndex(size - 1);
     return blockmap[ix.row][ix.col];
   }
   
