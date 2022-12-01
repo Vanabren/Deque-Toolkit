@@ -14,14 +14,14 @@ using namespace std;
 
 Deque::Deque() {
   size = 0; // num elements in array
-  mapSize = 1; // initial size of the blockmap array
+  mapSize = 3; // initial size of the blockmap array
+  elementsPerBlock = 8;
   blockmap = new int*[mapSize];
   for(int i = 0; i < mapSize; i++) {
     blockmap[i] = new int[elementsPerBlock];
   }
-  elementsPerBlock = 8;
-  first_block = 0; // index of the first occupied array in blockmap
-  first_element = 0; // index of the first occupied position in the first block
+  first_block = 1; // index of the first to-be occupied array in blockmap
+  first_element = 0; // index of the first to-be occupied position in the first block
 }
 
 Deque::~Deque() {
@@ -38,16 +38,11 @@ struct Index {
 
 void Deque::resize() { // doubles mapblock size
   int** expandedMap = new int*[2 * mapSize];
-  for(int i = 0; i < 2 * mapSize; i++) {
+  for(int i = 0; i < (2 * mapSize); i++) {
     expandedMap[i] = new int[elementsPerBlock];
   }
   
   copy(blockmap + first_block, blockmap + mapSize, expandedMap + (mapSize / 2));
-  for(int i = 0; i < mapSize; i++) {
-    delete[] blockmap[i];
-  }
-  delete[] blockmap;
-  
   blockmap = expandedMap;
   first_block = mapSize / 2;
   mapSize = mapSize * 2;
@@ -71,18 +66,21 @@ Index Deque::findIndex(int element) { // for use in [] overload
   return ix;
 }
 
-void Deque::push_front(int value) { // this is causing segfaults, for good reason cuz the method is garbage
+void Deque::push_front(int value) {
   if(size == (elementsPerBlock * mapSize)) {
+    resize();
+  }
+  if(first_element == 0 && first_block == 0) {
     resize();
   }
   if(isEmpty()) { // empty deque so add first element
     blockmap[first_block][first_element] = value;
   }
-  else if(first_element != 0) { // shouldn't be anything behind first element
+  else if(first_element > 0) { // shouldn't be anything behind first element
     blockmap[first_block][first_element - 1] = value;
     first_element -= 1;
   }
-  else { // need to back up to a previous datablock
+  else { // first_element is at 0, so need to back up to a previous datablock
     first_element = 7; // final position in a previous datablock
     first_block -= 1; // go back one datablock
     blockmap[first_block][first_element] = value;
@@ -115,7 +113,7 @@ int Deque::front() {
 }
 
 void Deque::push_back(int value) {
-  if(size == (elementsPerBlock * mapSize)) {
+  if(size == (elementsPerBlock * mapSize)) { // safety catch in-case deque becomes full
     resize();
   }
   if(isEmpty()) { // empty deque so set to first element
@@ -123,8 +121,11 @@ void Deque::push_back(int value) {
     size++;
     return;
   }
-
   Index last = findIndex(size - 1); // gets index of last element in deque
+  // safety catch in case at end of Deque
+  if(mapSize == last.row && last.col == 7) { 
+    resize();
+  }
   if(last.col < 7) { // last element in data block isn't filled
     blockmap[last.row][last.col+1] = value;
     size++;
