@@ -183,6 +183,7 @@ void coordTest() {
   thousandPushBack(d);
   thousandPushFront(d);
   thousandPushBack(d); // 4,000 elements added
+  cout << "Deque (d) Size: " << d.getSize() << endl; // 4000
   accessFront(d); // 1000
   accessBack(d); // 1000
   thousandPopBack(d); // 3000 er
@@ -194,10 +195,16 @@ void coordTest() {
   accessFront(d); // -1
   accessBack(d); // -1
 
-  Deque ac; // new deque for continued resizing tests
-  hundredPushFront(d);
+// New deque for accessor and size tests
+  
+  Deque ac;
+  accessorTest(ac, 0); // -1
+  accessorTest(ac, 100); // -1
+  hundredPushFront(ac); // pushes 0 - 99 in
+  cout << "Deque (ac) Size: " << ac.getSize() << endl;
+  accessorTest(ac, 50); // 49
   for(int i = 0; i < d.getSize(); i += 2) {
-    accessorTest(d, i);
+    accessorTest(ac, i);
   }
 }
 
