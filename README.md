@@ -5,7 +5,7 @@
 - main.cpp
   - The driver for the automatic testing of the Deque class and its various methods
 - Makefile
-  Utility used to compile Deque program from the source code listed above. Runs a series of tests without user input.
+  - Utility used to compile Deque program from the source code listed above. Runs a series of tests without user input.
 -------
 ### Compilation Instructions:
 - To compile, just use the *make* command within the Linux terminal (or Ubuntu) from the working directory where you placed all the source files. Creates an executable called *deque*. 
