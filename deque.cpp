@@ -116,18 +116,21 @@ void Deque::push_back(int value) {
   if(size == (elementsPerBlock * mapSize)) { // safety catch in-case deque becomes full
     resize();
   }
+  
   if(isEmpty()) { // empty deque so set to first element
     blockmap[first_block][first_element] = value;
     size++;
     return;
   }
-  Index last = findIndex(size - 1); // gets index of last element in deque
-  // safety catch in case at end of Deque
-  if(mapSize == last.row && last.col == 7) { 
+  
+  Index last = findIndex(size - 1); // gets index of last element in deque (so something exists there)
+  // safety catch just-in-case we're at end of Deque
+  if(mapSize - 1 == last.row && last.col == 7) { 
     resize();
   }
+  
   if(last.col < 7) { // last element in data block isn't filled
-    blockmap[last.row][last.col+1] = value;
+    blockmap[last.row][last.col + 1] = value;
     size++;
   }
   else { // last element in data block is filled, so forward another block

@@ -34,50 +34,53 @@ void hundredPopBack(Deque &d);
 
 void accessorTest(Deque &d);
 
-void stressTest();
 void coordTest();
 
 int main() {
-  // stressTest(); // commented out initially for readability
-  coordTest();
+   coordTest();
   
   return 0;
-}
-
-void stressTest() {
-  Deque d;
-  cout << "Stress tests begin: \n\n";
-  // Stress tests
-  thousandPushFront(d); // push a bunch from the front
-  //  accessorTest(d); // access a bunch
-  thousandPopFront(d); // pop a bunch from the front
-  accessFront(d);
-  accessBack(d);
-  // empty
-  thousandPopBack(d); // try to pop nonexistent elements (should return only -1s)
-  hundredPushBack(d);
-  thousandPopFront(d); // should return 100 - 0, then -1s for the last 900
-  // empty
-  thousandPushBack(d); // push a bunch of elements
-  thousandPopBack(d); // pop all added elements
-  //accessorTest(d); // try to access deleted elements (should return only -1s)
-  cout << "\nStress tests over... \n\n";
 }
 
 void coordTest() {
   Deque d;
   cout << "Coordinated tests begin: \n\n";
-  // Tests
-  regPopFront(d);
-  regPushFront(d, 3);
-  accessFront(d);
-  accessBack(d);
-  regPopFront(d);
-  regPopBack(d);
-  hundredPushFront(d);
-  hundredPopFront(d);
+  
+  // Simple Tests (for Precision)
+
+  regPopFront(d); // -1
+  regPushFront(d, 3); // [3]
+  regPushBack(d, 9); // [3][9]
+  regPopFront(d); // 3
+  regPushBack(d, 5); // [9][5]
+  regPopFront(d); // 9
+  regPushFront(d, 6); //[6][5]
+  accessFront(d); // 6
+  accessBack(d); // 5
+  regPopFront(d); // 6
+  regPopBack(d); // 5
+  
+  // Stress Tests (for resizing())
+  
+  hundredPushFront(d); // 100 in (100 remaining)
+  hundredPopFront(d); // 100 out (0 remaining)
+  hundredPushBack(d); // 100 in (100 remaining)
+  hundredPopBack(d);  // 100 out (0 remaining)
+  
   thousandPushFront(d);
-  thousandPopBack(d);
+  thousandPushBack(d);
+  thousandPushFront(d);
+  thousandPushBack(d); // 4,000 elements added
+  accessFront(d); // 1000
+  accessBack(d); // 1000
+  thousandPopBack(d); // 3000 er
+  thousandPopBack(d); // 2000 er
+  thousandPopFront(d); // 1000 er
+  thousandPopFront(d); // 0 er
+  regPopFront(d); // -1
+  regPopBack(d); // -1
+  accessFront(d); // -1
+  accessBack(d); // -1
 }
 
 void regPushFront(Deque &d, int value) {
@@ -122,7 +125,9 @@ void thousandPushBack(Deque &d) {
 }
 
 void thousandPopFront(Deque &d) {
-  return;
+  for(int i = 0; i < 1000; i++) {
+    cout << "Popping Thousand Front (i): " << d.pop_front() << endl;
+  }
 }
 
 void thousandPopBack(Deque &d) {
@@ -140,7 +145,10 @@ void hundredPushFront(Deque &d) {
 }
 
 void hundredPushBack(Deque &d) {
-  return;
+  for(int i = 0; i < 100; i++) {
+    cout << "Pushing Hundred Back (i): " << i << endl;
+    d.push_back(i);
+  }
 }
 
 void hundredPopFront(Deque &d) {
@@ -150,7 +158,9 @@ void hundredPopFront(Deque &d) {
 }
 
 void hundredPopBack(Deque &d) {
-  return;
+  for(int i = 0; i < 100; i++) {
+    cout << "Popping Hundred Back (i): " << d.pop_back() << endl;
+  }
 }
 
 void accessorTest(Deque &d, int index) {
