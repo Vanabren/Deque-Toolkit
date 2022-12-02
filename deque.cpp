@@ -25,9 +25,11 @@ Deque::Deque() {
 }
 
 Deque::~Deque() {
+  // delete all arrays in blockmap
   for(int i = 0; i < mapSize; i++) {
     delete[] blockmap[i];
   }
+  // delete blockmap array itself
   delete[] blockmap;
 }
 
@@ -37,12 +39,25 @@ struct Index {
 };
 
 void Deque::resize() { // doubles mapblock size
+  // create new resized() array
   int** expandedMap = new int*[2 * mapSize];
+  // set each array pointer in the new map to a point in memory
   for(int i = 0; i < (2 * mapSize); i++) {
     expandedMap[i] = new int[elementsPerBlock];
   }
-  
+  // Copy original array to middle of new resized array
   copy(blockmap + first_block, blockmap + mapSize, expandedMap + (mapSize / 2));
+
+  /*
+  // delete old blockmap (and its internal array pointers) to prevent memory leaks
+  for(int i = 0; i < mapSize; i++) {
+    delete[] blockmap[i];
+  }
+  */
+  delete[] blockmap;
+  
+
+  // Point blockmap to new array pointer and adjust variables
   blockmap = expandedMap;
   first_block = mapSize / 2;
   mapSize = mapSize * 2;
