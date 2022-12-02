@@ -184,13 +184,19 @@ int Deque::getSize() {
   return size;
 }
 
-int& Deque::operator[](int i) { // returns element at index i
+int& Deque::operator[](int i) { 
   Index ix;
+  // if size == 0, cannot return local variable so set unused first element to -1 and return
+  // shouldn't cause problems because size isn't incrememented, and push_x() functions still work as intended
+  if(size == 0) { 
+    blockmap[first_block][first_element] = -1;
+    return blockmap[first_block][first_element];
+  }
   if(i > size) {// i is too big for the amount of elements in it, so return last element
     ix = findIndex(size - 1);
     return blockmap[ix.row][ix.col];
   }
   
   ix = findIndex(i);
-  return blockmap[ix.row][ix.col];
+  return blockmap[ix.row][ix.col]; // returns element at index i
 }
