@@ -26,7 +26,7 @@
 - operator[] - Accesses element at selected index and returns value. 
   - If attempting to access out-of-bounds of Deque: 
    - Returns -1 if size == 0 (e.g. no elements present in Deque)
-   - Or last element in Deque (if even a single element in present in Deque)
+   - Returns last element in Deque (e.g. if even a single element in present in Deque)
 - front() - Returns a copy of the element at the front of the Deque (first element)
 - back() - Returns a copy of the element at the end of the deque (last element)
 
