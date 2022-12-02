@@ -32,7 +32,7 @@ void hundredPushBack(Deque &d);
 void hundredPopFront(Deque &d);
 void hundredPopBack(Deque &d);
 
-void accessorTest(Deque &d);
+void accessorTest(Deque &d, int index);
 
 void coordTest();
 
@@ -81,6 +81,12 @@ void coordTest() {
   regPopBack(d); // -1
   accessFront(d); // -1
   accessBack(d); // -1
+
+  Deque ac; // new deque for continued resizing tests
+  hundredPushFront(d);
+  for(int i = 0; i < d.getSize(); i += 2) {
+    accessorTest(d, i);
+  }
 }
 
 void regPushFront(Deque &d, int value) {
@@ -111,7 +117,8 @@ void accessBack(Deque &d) {
 void thousandPushFront(Deque &d) {
   cout << endl;
   for(int i = 0; i < 1000; i++) {
-    cout << "Pushing Thousand Front (i): " << i << endl;
+    if(i == 0 || i == 999) 
+      cout << "Pushing Thousand Front (i): " << i << endl;
     d.push_front(i);
   }
 }
@@ -119,7 +126,8 @@ void thousandPushFront(Deque &d) {
 void thousandPushBack(Deque &d) {
   cout << endl;
   for(int i = 0; i < 1000; i++) {
-    cout << "Pushing Thousand Back (i): " << i << endl;
+    if(i == 0 || i == 999)
+      cout << "Pushing Thousand Back (i): " << i << endl;
     d.push_back(i);
   }
 }
