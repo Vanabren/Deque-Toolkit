@@ -41,12 +41,12 @@
  
  - Added a struct named Index for use in finding the index of certain elements.
  
- - For the Bracket overload (e.g deque[i]), if "i" is too big for the amount of elements the Deque is sized to (or had present within it), a -1 is returned to the user by setting the first element to -1 and returning that (because it has to be the reference to an int within the Deque, not a local variable that is returned). This works fine because size is not incremented, and actual data will be mapped to that spot in memory when actually pushed.
+ - For the Bracket overload (e.g deque[i]), if "i" is too big for the amount of elements the Deque is sized to (or had present within it), a -1 is returned to the user by setting the first element to -1 and returning that (because it has to be the reference to an int within the Deque, not a local variable that is returned). This works fine because size is not incremented, and actual data will be mapped to that spot in memory when actual pushes occur.
     - Specifically: 
     - If there is at least one element present in the Deque, the last element in the Deque is returned when the index is too large. 
     - If no elements exist at all, *then* the first element is initialized to -1 and returned, but that data will be overwritten by actual data when data is pushed into the Deque, so existing data isn't accidentally overwritten to -1 during use.
 
-- I didn't include a variable/pointer to keep track of the last element in the Deque as the getIndex() works fine for getting its location. The calculations don't loop or anything, so constant-time ( O(1) ) should still be present, though they may end up slightly slower than just returning a value from a helper variable.
+- I didn't include a variable/pointer to keep track of the last element in the Deque as the getIndex() works fine for getting its location. The calculations don't loop or anything, so constant-time access ( O(1) ) should still be present, though they may end up slightly slower than just returning a value from a helper variable.
 -------
 ### Challenges: 
  - I got segmentation faults on the push_front(), push_back(), and resize() methods when starting testing that threw me for a loop for a few hours. However, I eventually discovered that my push_front() method had faulty bounds checking, my resize() function had an extra unnecessary delete[] thrown in that would cause a segmentation fault after a few resizes, and my push_back() method also had bounds checking issues that made it access a point in memory it shouldn't have had access to (I used this : [mapSize][first_element] instead of the correct version: [mapSize - 1][first_element]) After correcting them, the segmentation faults disappeared and I was able to push thousands of elements from front and back without issues.
